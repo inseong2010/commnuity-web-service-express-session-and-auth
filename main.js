@@ -10,6 +10,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extends: false}));
 app.use(compression());
 app.use(session({
+    httpOnly: true,
     secret: 'adasdadasdfsdfsfs',
     resave: false,
     saveUninitialized: true,
