@@ -4,6 +4,7 @@ var path = require('path');
 var fs = require('fs');
 var sanitizeHtml = require('sanitize-html');
 var template = require('../lib/template');
+var auth = require('../lib/auth');
 
 var authData = {
     email: '123',
@@ -41,6 +42,21 @@ router.post('/login', (req, res) => {
     } else {
         res.send('hwo?');
     };
+});
+
+router.get('/logout', (req, res) => {
+    if (!auth.isOwner(req, res)) {
+        res.redirect(`/auth/login`);
+        return false;
+    }
+    req.session.destroy((err) => {
+        if (err) {
+            console.log('ERROR: ' + err);
+            throw err;
+        } else {
+            res.redirect(`/`);
+        };
+    });
 });
 
 module.exports = router;

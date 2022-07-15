@@ -7,6 +7,10 @@ var template = require('../lib/template');
 var auth = require('../lib/auth');
 
 router.get('/new', (req, res) => {
+    if (!auth.isOwner(req, res)) {
+        res.redirect(`/auth/login`);
+        return false;
+    }
     var title = 'create new page';
     var list = template.LIST(req.list);
     var html = template.HTML(title, list, `
@@ -24,6 +28,10 @@ router.get('/new', (req, res) => {
 });
 
 router.post('/new', (req, res) => {
+    if (!auth.isOwner(req, res)) {
+        res.redirect(`/auth/login`);
+        return false;
+    }
     var post = req.body;
     var title = post.title;
     var description = post.description
@@ -40,6 +48,10 @@ router.post('/new', (req, res) => {
 });
 
 router.get('/update/:pageId', (req, res) => {
+    if (!auth.isOwner(req, res)) {
+        res.redirect(`/auth/login`);
+        return false;
+    }
     var filteredhack = path.parse(req.params.pageId).base;
     fs.readFile(`data/${filteredhack}`, 'utf8', function(err, description) {
     var list = template.LIST(req.list);
@@ -62,6 +74,10 @@ router.get('/update/:pageId', (req, res) => {
 });
 
 router.post('/update', (req, res) => {
+    if (!auth.isOwner(req, res)) {
+        res.redirect(`/auth/login`);
+        return false;
+    }
     var post = req.body;
     var id = post.id;
     var title = post.title;
@@ -81,6 +97,10 @@ router.post('/update', (req, res) => {
 });
 
 router.post('/delete', (req, res) => {
+    if (!auth.isOwner(req, res)) {
+        res.redirect(`/auth/login`);
+        return false;
+    }
     var post = req.body;
     var id = post.id;
     var filteredhack = path.parse(id).base;
