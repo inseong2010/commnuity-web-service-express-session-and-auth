@@ -4,6 +4,7 @@ var path = require('path');
 const fs = require("fs");
 var sanitizeHtml = require('sanitize-html');
 var template = require('../lib/template');
+var auth = require('../lib/auth');
 
 router.get('/new', (req, res) => {
     var title = 'create new page';
@@ -18,7 +19,7 @@ router.get('/new', (req, res) => {
         <input type="submit">
     </p>
     </form>
-    `, ''); 
+    `, '', auth.statusUI(req, res)); 
     res.send(html);
 });
 
@@ -55,7 +56,7 @@ router.get('/update/:pageId', (req, res) => {
             <input type="submit">
         </p>
     </form>
-    `, `<a href="/page/new">New Page!!</a> <a href="/page/update/${title}">update</a>`);
+    `, `<a href="/page/new">New Page!!</a> <a href="/page/update/${title}">update</a>`, auth.statusUI(req, res));
         res.send(html);
     });
 });
@@ -105,7 +106,7 @@ router.get('/:pageId', (req, res, next) => {
             <input type="hidden" name="id" value="${sanitizedTitle}">
             <input type="submit" value="delete">
             </form>
-            `);
+            `, auth.statusUI(req, res));
         res.send(html);
         };
     });
