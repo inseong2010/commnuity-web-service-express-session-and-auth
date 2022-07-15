@@ -2,11 +2,20 @@ var express = require("express");
 var app = express();
 const fs = require("fs");
 var compression = require('compression');
+var session = require('express-session');
+var fileStore = require('session-file-store')(session);
 const PORT = 80;
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extends: false}));
 app.use(compression());
+app.use(session({
+    secret: 'adasdadasdfsdfsfs',
+    resave: false,
+    saveUninitialized: true,
+    store: new fileStore()
+}));
+
 app.get('*', (req, res, next) => {
     fs.readdir('./data', (err, filelist) => {
         req.list = filelist;

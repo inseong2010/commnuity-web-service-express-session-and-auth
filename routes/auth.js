@@ -5,6 +5,12 @@ var fs = require('fs');
 var sanitizeHtml = require('sanitize-html');
 var template = require('../lib/template');
 
+var authData = {
+    email: '123',
+    pw: 'admin',
+    nickname: '관리자',
+}
+
 router.get('/login', (req, res) => {
     var title = 'WEB - login';
     var list = template.LIST(req.list);
@@ -18,6 +24,23 @@ router.get('/login', (req, res) => {
     </form>
     `, ''); 
     res.send(html);
+});
+
+router.post('/login', (req, res) => {
+    var post = req.body;
+    var email = post.email;
+    var pw = post.pw;
+    /* if (email === 'admin' || email === 'skeleton') {
+        if (pw === authData.pw) {
+            res.send('admin welcome');
+        }
+    } else */ if(email === authData.email && pw === authData.pw) {
+        req.session.is_logined = true;
+        req.session.nickname = authData.nickname;
+        res.redirect(`/`);
+    } else {
+        res.send('hwo?');
+    };
 });
 
 module.exports = router;
